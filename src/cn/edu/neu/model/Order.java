@@ -16,6 +16,7 @@ public class Order {
 	private String orderPostname;
 	private List<OrderDetail> odetails;
 	//commit pull push
+	//merge
 	
 	
 	public Order() {
