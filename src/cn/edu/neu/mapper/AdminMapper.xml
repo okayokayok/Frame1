@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace：必须与对应的接口全类名一致
+	id:必须与对应接口的某个对应的方法名一致
+	
+ -->
+<mapper namespace="cn.edu.neu.mapper.AdminMapper">
+	<select id="checkAdmin" parameterType="User" resultType="User">
+		select user_id userId,user_name userName,user_age userAge from t_user where user_name=#{userName} and user_pass=#{userPass} and user_rank=1
+	</select>
+	
+	
+	<select id="findAll" resultType="Category">
+    	<!-- cate_id:sql的字段名  cateId：实体属性名    -->
+        select cate_id cateId,cate_name cateName,cate_pic catePic from t_category
+    </select>
+    
+    <select id="findCateByid" resultType="Category">
+    	select cate_id cateId,cate_name cateName,cate_pic catePic from t_category
+    	 where cate_id=#{cateId}
+    </select>
+    
+    
+    <update id="handleCate" parameterType="Category">
+    	update t_category
+    		<set>
+				<if test="cateName != null and cateName != '' ">
+					cate_name = #{cateName},
+				</if>
+				<if test="catePic != null and catePic != '' ">
+				cate_pic = #{catePic},
+			</if>
+    		</set>
+    		WHERE cate_id = #{cateId}
+    </update>
+
+
+
+
+	<select id="getAdminSizes" resultType="Size">
+		select size_id sizeId, size_name sizeName from t_size
+	</select>
+	
+	<delete id="delSizeById" parameterType="int">
+		delete from t_size where size_id = #{sizeId}
+	</delete>
+	
+	<insert id="addSize" parameterType="Size">
+		insert into t_size (size_id,size_name) values(null,#{sizeName})
+	</insert>
+	
+	<select id="findSizeById" parameterType="int" resultType="Size">
+		select size_id sizeId, size_name sizeName from t_size where size_id=#{sizeId}
+	</select>
+	
+	<update id="updateSize" parameterType="Size">
+		update t_size set size_name = #{sizeName} where size_id=#{sizeId}
+	</update>
+	
+	
+	
+	<select id="getAdminColors" resultType="Color">
+		select color_id colorId, color_name colorName from t_color
+	</select>
+	
+	<delete id="delColorById" parameterType="int">
+		delete from t_color where color_id = #{colorId}
+	</delete>
+	
+	<insert id="addColor" parameterType="Color">
+		insert into t_color (color_id,color_name) values(null,#{colorName})
+	</insert>
+	
+	<select id="findColorById" parameterType="int" resultType="Color">
+		select color_id colorId, color_name colorName from t_color where color_id=#{colorId}
+	</select>
+	
+	<update id="updateColor" parameterType="Color">
+		update t_color set color_name = #{colorName} where color_id=#{colorId}
+	</update>
+	
+	
+	
+	
+	<select id="findAllGoods" resultType="Goods">
+		select goods_id goodsId,cate_id cateId,goods_name goodsName,goods_price goodsPrice,
+		goods_discount goodsDiscount,goods_stock goodsStock,goods_date goodsDate,goods_sales goodsSales,goods_pic goodsPic 
+		from t_goods 
+	</select>
+	
+	<select id="SearchGoods" resultType="Goods">
+		select goods_id goodsId,cate_id cateId,goods_name goodsName,goods_price goodsPrice,
+		goods_discount goodsDiscount,goods_stock goodsStock,goods_date goodsDate,goods_sales goodsSales,goods_pic goodsPic 
+		from t_goods 
+			where 
+				<if test="goodsName != null and goodsName != '' ">
+					goods_name like CONCAT('%',#{goodsName},'%')  
+					and
+				</if>
+				
+				<if test="cateId != 0">
+				
+					cate_id = #{cateId}
+					and
+				</if>
+				
+				
+				
+				<if test="startPrice != null and startPrice != '' ">
+				
+					goods_price  &gt;= #{startPrice}
+					and
+				</if>
+				
+				<if test="endPrice != null and endPrice != '' ">
+				
+					goods_price  &lt;= #{endPrice}
+				</if>
+	</select>
+	
+	<select id="findGoodsByid" resultType="Goods">
+		select goods_id goodsId,cate_id cateId,goods_name goodsName,goods_price goodsPrice,goods_disc goodsDisc,goods_origin goodsOrigin,goods_material goodsMaterial,
+		goods_discount goodsDiscount,goods_stock goodsStock,goods_date goodsDate,goods_sales goodsSales,goods_pic goodsPic,goods_postalfee goodsPostalfee
+		from t_goods where goods_id=#{goodsId}
+	</select>
+	
+	<update id="updateGood" parameterType="Goods">
+		update t_goods 
+			<set>
+				<if test="goodsName != null and goodsName != '' ">
+					goods_name = #{goodsName},
+				</if>
+				<if test="goodsDisc != null and goodsDisc != '' ">
+				goods_disc = #{goodsDisc},
+				</if>
+				<if test="goodsPrice != null and goodsPrice != '' ">
+				goods_price = #{goodsPrice},
+				</if>
+				<if test="goodsDiscount != null and goodsDiscount != '' ">
+				goods_discount = #{goodsDiscount},
+				</if>
+				<if test="goodsOrigin != null and goodsOrigin != '' ">
+				goods_origin = #{goodsOrigin},
+				</if>
+				<if test="goodsMaterial != null and goodsMaterial != '' ">
+				goods_material = #{goodsMaterial},
+				</if>
+				<if test="goodsPostalfee != null and goodsPostalfee != '' ">
+				goods_postalfee = #{goodsPostalfee},
+				</if>
+				<if test="goodsPic != null and goodsPic != '' ">
+				goods_pic = #{goodsPic},
+				</if>
+    		</set>
+    		WHERE goods_id = #{goodsId}
+	</update>
+	
+	<delete id="delGoodSize">
+		delete from r_goodssize where goods_id=#{goodsId}
+	</delete>
+	<delete id="delGoodColor">
+		delete from r_goodscolor where goods_id=#{goodsId}
+	</delete>
+	
+	<delete id="delGoods">
+		delete from t_goods where goods_id=#{goodsId}
+	</delete>
+	
+	<select id="getGoodPicsBygoodsId" parameterType="Integer" resultType="Pic">
+		select pic_id picId,goods_id goodsId,pic_url picUrl from t_pic 
+			where goods_id=#{goodsId}
+	</select>
+	
+	<delete id="delGoodsPics">
+		delete from t_pic 
+			where pic_id=#{0}
+			and goods_id=#{1}
+	</delete>
+	
+	
+	<insert id="addGoodsPics">
+		insert into t_pic(goods_id,pic_url)
+			values(#{0},#{1})
+	</insert>
+	
+	<select id="findGoodsSize" resultType="Size">
+		select size_id sizeId,size_name sizeName from t_size
+		 where size_id NOT IN (select size_id from r_goodssize where goods_id=#{goodsId})
+	</select>
+	
+	<select id="findGoodsColors" resultType="Color">
+		select color_id colorId,color_name colorName from t_color
+		where color_id NOT IN (select color_id from r_goodscolor where goods_id=#{goodsId})
+	</select>
+	
+	<insert id="addGoodSizes">
+		insert into r_goodssize(goods_id,size_id)
+			values(#{1},#{0})
+	</insert>
+	
+	<insert id="addGoodColors">
+		insert into r_goodscolor(goods_id,color_id)
+			values(#{1},#{0})
+	</insert>
+	
+	
+	<select id="findGoodsSizesById" resultType="GoodSizes">
+		select goods_id goodsId,r_goodssize.size_id sizeId,size_name sizeName from t_size,r_goodssize
+		 where t_size.size_id=r_goodssize.size_id
+		  and goods_id=#{goodsId}
+	</select>
+	
+	<delete id="delGoodSizes">
+		delete from r_goodssize where goods_id=#{goodsId}
+	</delete>
+	
+	<select id="findGoodsColorsById" resultType="GoodColors">
+		select goods_id goodsId,r_goodscolor.color_id colorId,color_name colorName from t_color,r_goodscolor
+		 where t_color.color_id=r_goodscolor.color_id
+		  and goods_id=#{goodsId}
+	</select>
+	
+	<delete id="delGoodColors">
+		delete from r_goodscolor where goods_id=#{goodsId}
+	</delete>
+</mapper>

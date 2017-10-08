@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace：必须与对应的接口全类名一致
+	id:必须与对应接口的某个对应的方法名一致
+	
+ -->
+<mapper namespace="cn.edu.neu.mapper.CateMapper">
+    <select id="findAll" resultType="Category">
+    	<!-- cate_id:sql的字段名  cateId：实体属性名    -->
+        select cate_id cateId,cate_name cateName,cate_pic catePic from t_category
+    </select>
+    
+    
+     <insert id="addType" > 
+		insert into t_category values(null,#{0},' ',#{1})
+	</insert>
+	
+	<insert id="addCate" useGeneratedKeys="true" keyProperty="cateId" parameterType="Category">
+		insert into t_category (cate_id,cate_name,cate_pic) values(null,#{cateName},#{catePic})
+	</insert>
+	
+    <select id="finId" parameterType="int" resultType="Category">
+		SELECT cate_id cateId,cate_name cateName,cate_pic catePic FROM t_category WHERE cate_id= #{cateId}
+	</select>
+	
+	 <delete id="deleteType" parameterType="int">
+        delete from t_category where cate_id=#{cateId}
+    </delete>
+    
+    
+    <update id="updateType" parameterType="Category">
+		UPDATE t_category
+		<set>
+			<!-- 判断传入的数据cateName是否为空和null  -->
+			<if test="cateName != null and cateName !='' ">
+				cate_name = #{cateName},
+			</if>
+		
+			
+		</set>
+		WHERE cate_id = #{cateId}
+	</update>
+	
+</mapper>

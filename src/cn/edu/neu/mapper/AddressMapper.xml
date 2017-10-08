@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace：必须与对应的接口全类名一致
+	id:必须与对应接口的某个对应的方法名一致
+	
+ -->
+<mapper namespace="cn.edu.neu.mapper.AddressMapper">
+	
+	
+	<select id="findAddressByUserId"  resultType="Address">
+		select addr_id addrId, user_id userId, addr_province addrProvince, addr_city addrCity, addr_area addrArea, addr_content addrContent, addr_receiver addrReceiver, addr_tel addrTel, addr_isdefault addrIsdefault from t_address where user_id=#{userId}
+	</select>
+	
+	<insert id="addAddress" parameterType="Address">
+		insert into t_address(user_id, addr_province, addr_city, addr_area, addr_content, addr_receiver, addr_tel, addr_isdefault) values(#{userId},#{addrProvince},#{addrCity},#{addrArea},#{addrContent},#{addrReceiver},#{addrTel},0)
+	</insert>
+	
+	<select id="findAddrById" parameterType="int" resultType="Address">
+		select addr_id addrId, user_id userId, addr_province addrProvince, addr_city addrCity, addr_area addrArea, addr_content addrContent, addr_receiver addrReceiver, addr_tel addrTel, addr_isdefault addrIsdefault from t_address where addr_id=#{addrId}
+	</select>
+	
+	<delete id="delAddress" parameterType="int">
+		delete from t_address where addr_id=#{addrId}
+	</delete>
+	
+	<update id="clearDefault" parameterType="int">
+		update t_address set addr_isdefault =0 where user_id = #{userId} and addr_isdefault=1
+	</update>
+	
+	<update id="setDefaultAddress" parameterType="int">
+		update t_address set addr_isdefault =1 where addr_id = #{addrId}
+	</update>
+	
+	<select id="findAddressByUserIdAndDef" parameterType="int" resultType="int">
+		select addr_id addrId from t_address where user_id = #{userId} and addr_isdefault = 1
+	</select>
+</mapper>
